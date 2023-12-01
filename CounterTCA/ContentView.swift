@@ -26,13 +26,21 @@ struct CounterFeature: Reducer {
       Reduce { state, action in
         switch action {
         case .decrementButtonTapped:
-          //code
+          state.count -= 1
+          return .none
+
         case .getFactButtonTapped:
-          //code
+          // TODO: Perform network request
+          return .none
+
         case .incrementButtonTapped:
-          //code
+          state.count += 1
+          return .none
+
         case .toggleTimerButtonTapped:
-          //code
+          state.isTimerOn.toggle()
+          // TODO: Start a timer
+          return .none
         }
       }
     }
