@@ -30,8 +30,13 @@ struct CounterFeature: Reducer {
           return .none
 
         case .getFactButtonTapped:
-          // TODO: Perform network request
-          return .none
+          return .run { [count = state.count] send in
+            try await URLSession.shared.data(
+              from: URL(
+                string: "http://www.numbersapi.com/\(count)"
+              )!
+            )
+          }
 
         case .incrementButtonTapped:
           state.count += 1
