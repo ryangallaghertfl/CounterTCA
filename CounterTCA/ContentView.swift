@@ -47,41 +47,48 @@ struct CounterFeature: Reducer {
 }
 
 struct ContentView: View {
-    var fact: Bool?
-    var isTimerOn = false
+  let store: StoreOf<CounterFeature>
+
   var body: some View {
     Form {
       Section {
-        Text("0")
+        Text("\(self.store.count)")
         Button("Decrement") {
-          //Do something
+          self.store.send(.decrementButtonTapped)
         }
         Button("Increment") {
-          //Do something
+          self.store.send(.incrementButtonTapped)
         }
       }
-        Section {
-          Button("Get fact") {}
-          if let fact {
-            Text("Some fact")
+
+      Section {
+        Button("Get fact") {
+          self.store.send(.getFactButtonTapped)
+        }
+        if let fact = self.store.fact {
+          Text(fact)
+        }
+      }
+
+      Section {
+        if self.store.isTimerOn {
+          Button("Stop timer") {
+            self.store.send(.toggleTimerButtonTapped)
+          }
+        } else {
+          Button("Start timer") {
+            self.store.send(.toggleTimerButtonTapped)
           }
         }
-        
-        Section {
-            if isTimerOn {
-                Button("Stop timer") {
-                    //Do something
-                }
-            } else {
-                Button("Start timer") {
-                    //Do something
-                }
-            }
-        }
+      }
     }
   }
 }
 
 #Preview {
-    ContentView()
+  ContentView(
+    store: Store(initialState: CounterFeature.State()) {
+      CounterFeature()
+    }
+  )
 }
