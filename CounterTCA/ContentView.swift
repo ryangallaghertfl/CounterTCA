@@ -31,11 +31,10 @@ struct CounterFeature: Reducer {
 
         case .getFactButtonTapped:
           return .run { [count = state.count] send in
-            try await URLSession.shared.data(
-              from: URL(
-                string: "http://www.numbersapi.com/\(count)"
-              )!
-            )
+              let (data, _) = try await URLSession.shared.data(
+              from: URL(string: "http://www.numbersapi.com/\(count)")!)
+              let fact = String(decoding: data, as: UTF8.self)
+              print(fact)
           }
 
         case .incrementButtonTapped:

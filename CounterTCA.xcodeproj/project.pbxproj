@@ -45,6 +45,7 @@
 		A11066282B1A0F2F00CE4B6D /* CounterTCAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CounterTCAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A110662C2B1A0F2F00CE4B6D /* CounterTCAUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterTCAUITests.swift; sourceTree = "<group>"; };
 		A110662E2B1A0F2F00CE4B6D /* CounterTCAUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterTCAUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A110663E2B1A32A100CE4B6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +97,7 @@
 		A11066102B1A0F2D00CE4B6D /* CounterTCA */ = {
 			isa = PBXGroup;
 			children = (
+				A110663E2B1A32A100CE4B6D /* Info.plist */,
 				A11066112B1A0F2D00CE4B6D /* CounterTCAApp.swift */,
 				A11066132B1A0F2D00CE4B6D /* ContentView.swift */,
 				A11066152B1A0F2E00CE4B6D /* Assets.xcassets */,
@@ -433,6 +435,7 @@
 				DEVELOPMENT_TEAM = 29QRCNRYL3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CounterTCA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -462,6 +465,7 @@
 				DEVELOPMENT_TEAM = 29QRCNRYL3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CounterTCA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
