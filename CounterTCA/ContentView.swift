@@ -91,6 +91,7 @@ struct ContentView: View {
   ContentView(
     store: Store(initialState: CounterFeature.State()) {
       CounterFeature()
+            ._printChanges()
     }
   )
 }
