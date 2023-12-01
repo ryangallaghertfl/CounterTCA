@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    var fact: Bool?
+    var isTimerOn = false
   var body: some View {
     Form {
       Section {
@@ -19,6 +21,24 @@ struct ContentView: View {
           //Do something
         }
       }
+        Section {
+          Button("Get fact") {}
+          if let fact {
+            Text("Some fact")
+          }
+        }
+        
+        Section {
+            if isTimerOn {
+                Button("Stop timer") {
+                    //Do something
+                }
+            } else {
+                Button("Start timer") {
+                    //Do something
+                }
+            }
+        }
     }
   }
 }
