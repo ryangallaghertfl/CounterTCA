@@ -28,6 +28,7 @@ struct CounterFeature: Reducer {
         switch action {
         case .decrementButtonTapped:
           state.count -= 1
+          state.fact = nil
           return .none
             
         case let .factResponse(fact):
@@ -35,6 +36,7 @@ struct CounterFeature: Reducer {
           return .none
 
         case .getFactButtonTapped:
+            state.fact = nil
           return .run { [count = state.count] send in
               let (data, _) = try await URLSession.shared.data(
               from: URL(string: "http://www.numbersapi.com/\(count)")!)
@@ -44,6 +46,7 @@ struct CounterFeature: Reducer {
 
         case .incrementButtonTapped:
           state.count += 1
+          state.fact = nil
           return .none
 
         case .toggleTimerButtonTapped:
