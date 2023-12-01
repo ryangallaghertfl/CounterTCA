@@ -21,45 +21,60 @@ struct CounterFeature: Reducer {
         case factResponse(String)
         case getFactButtonTapped
         case incrementButtonTapped
+        case timerTicked
         case toggleTimerButtonTapped
     }
     
     var body: some ReducerOf<Self> {
-      Reduce { state, action in
-        switch action {
-        
-        case .decrementButtonTapped:
-          state.count -= 1
-          state.fact = nil
-          return .none
-            
-        case let .factResponse(fact):
-          state.fact = fact
-            state.isLoadingFact = false
-          return .none
-
-        case .getFactButtonTapped:
-            state.fact = nil
-            state.isLoadingFact = true
-          return .run { [count = state.count] send in
-              try await Task.sleep(for: .seconds(1))
-              let (data, _) = try await URLSession.shared.data(from: URL(string: "http://www.numbersapi.com/\(count)")!)
-              let fact = String(decoding: data, as: UTF8.self)
-              await send(.factResponse(fact))
-          }
-
-        case .incrementButtonTapped:
-          state.count += 1
-          state.fact = nil
-          return .none
-
-        case .toggleTimerButtonTapped:
-          state.isTimerOn.toggle()
-          // TODO: Start a timer
-          return .none
+        Reduce { state, action in
+            switch action {
+                
+            case .decrementButtonTapped:
+                state.count -= 1
+                state.fact = nil
+                return .none
+                
+            case let .factResponse(fact):
+                state.fact = fact
+                state.isLoadingFact = false
+                return .none
+                
+            case .getFactButtonTapped:
+                state.fact = nil
+                state.isLoadingFact = true
+                return .run { [count = state.count] send in
+                    try await Task.sleep(for: .seconds(1))
+                    let (data, _) = try await URLSession.shared.data(from: URL(string: "http://www.numbersapi.com/\(count)")!)
+                    let fact = String(decoding: data, as: UTF8.self)
+                    await send(.factResponse(fact))
+                }
+                
+            case .incrementButtonTapped:
+                state.count += 1
+                state.fact = nil
+                return .none
+                
+            case .timerTicked:
+                state.count += 1
+                return .none
+                
+            case .toggleTimerButtonTapped:
+                state.isTimerOn.toggle()
+                if state.isTimerOn {
+                    return .run { send in
+                      while true {
+                        try await Task.sleep(for: .seconds(1))
+                          await send(.timerTicked)
+                      }
+                    }
+                } else {
+                    // Stop the timer
+                    return .none
+                }
+            }
         }
-      }
     }
+    
 }
 
 struct ContentView: View {
