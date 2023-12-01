@@ -12,6 +12,7 @@ struct CounterFeature: Reducer {
     struct State: Equatable {
         var count = 0
         var fact: String?
+        var isLoadingFact = false
         var isTimerOn = false
     }
     
@@ -34,10 +35,12 @@ struct CounterFeature: Reducer {
             
         case let .factResponse(fact):
           state.fact = fact
+            state.isLoadingFact = false
           return .none
 
         case .getFactButtonTapped:
             state.fact = nil
+            state.isLoadingFact = true
           return .run { [count = state.count] send in
               try await Task.sleep(for: .seconds(1))
               let (data, _) = try await URLSession.shared.data(from: URL(string: "http://www.numbersapi.com/\(count)")!)
@@ -74,15 +77,22 @@ struct ContentView: View {
                         viewStore.send(.incrementButtonTapped)
                     }
                 }
-                
                 Section {
-                    Button("Get fact") {
-                        viewStore.send(.getFactButtonTapped)
-                    }
-                    if let fact = viewStore.fact {
-                        Text(fact)
-                    }
-                }
+                          Button {
+                            viewStore.send(.getFactButtonTapped)
+                          } label: {
+                            HStack {
+                              Text("Get fact")
+                              if viewStore.isLoadingFact {
+                                Spacer()
+                                ProgressView()
+                              }
+                            }
+                          }
+                          if let fact = viewStore.fact {
+                            Text(fact)
+                          }
+                        }
                 
                 Section {
                     if viewStore.isTimerOn {
