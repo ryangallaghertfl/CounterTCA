@@ -25,6 +25,10 @@ struct CounterFeature: Reducer {
         case toggleTimerButtonTapped
     }
     
+    private enum CancelID {
+        case timer
+      }
+    
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -59,23 +63,24 @@ struct CounterFeature: Reducer {
                 return .none
                 
             case .toggleTimerButtonTapped:
-                state.isTimerOn.toggle()
-                if state.isTimerOn {
-                    return .run { send in
-                      while true {
-                        try await Task.sleep(for: .seconds(1))
+                    state.isTimerOn.toggle()
+                    if state.isTimerOn {
+                      return .run { send in
+                          while true {
+                              
+                              try await Task.sleep(for: .seconds(1))
                           await send(.timerTicked)
+                        }
                       }
+                      .cancellable(id: CancelID.timer)
+                    } else {
+                        return .cancel(id: CancelID.timer)
                     }
-                } else {
-                    // Stop the timer
-                    return .none
+                    
+                  }
                 }
+              }
             }
-        }
-    }
-    
-}
 
 struct ContentView: View {
     let store: StoreOf<CounterFeature>
