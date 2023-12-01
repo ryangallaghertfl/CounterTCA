@@ -8,6 +8,36 @@
 import SwiftUI
 import ComposableArchitecture
 
+struct CounterFeature: Reducer {
+    struct State {
+        var count = 0
+        var fact: String?
+        var isTimerOn = false
+    }
+    
+    enum Action {
+        case decrementButtonTapped
+        case getFactButtonTapped
+        case incrementButtonTapped
+        case toggleTimerButtonTapped
+    }
+    
+    var body: some ReducerOf<Self> {
+      Reduce { state, action in
+        switch action {
+        case .decrementButtonTapped:
+          //code
+        case .getFactButtonTapped:
+          //code
+        case .incrementButtonTapped:
+          //code
+        case .toggleTimerButtonTapped:
+          //code
+        }
+      }
+    }
+}
+
 struct ContentView: View {
     var fact: Bool?
     var isTimerOn = false
