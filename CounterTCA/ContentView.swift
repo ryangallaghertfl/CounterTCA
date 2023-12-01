@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct CounterFeature: Reducer {
-    struct State {
+    struct State: Equatable {
         var count = 0
         var fact: String?
         var isTimerOn = false
@@ -47,42 +47,44 @@ struct CounterFeature: Reducer {
 }
 
 struct ContentView: View {
-  let store: StoreOf<CounterFeature>
-
-  var body: some View {
-    Form {
-      Section {
-        Text("\(self.store.count)")
-        Button("Decrement") {
-          self.store.send(.decrementButtonTapped)
+    let store: StoreOf<CounterFeature>
+    
+    var body: some View {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            Form {
+                Section {
+                    Text("\(viewStore.count)")
+                    Button("Decrement") {
+                        viewStore.send(.decrementButtonTapped)
+                    }
+                    Button("Increment") {
+                        viewStore.send(.incrementButtonTapped)
+                    }
+                }
+                
+                Section {
+                    Button("Get fact") {
+                        viewStore.send(.getFactButtonTapped)
+                    }
+                    if let fact = viewStore.fact {
+                        Text(fact)
+                    }
+                }
+                
+                Section {
+                    if viewStore.isTimerOn {
+                        Button("Stop timer") {
+                            viewStore.send(.toggleTimerButtonTapped)
+                        }
+                    } else {
+                        Button("Start timer") {
+                            viewStore.send(.toggleTimerButtonTapped)
+                        }
+                    }
+                }
+            }
         }
-        Button("Increment") {
-          self.store.send(.incrementButtonTapped)
-        }
-      }
-
-      Section {
-        Button("Get fact") {
-          self.store.send(.getFactButtonTapped)
-        }
-        if let fact = self.store.fact {
-          Text(fact)
-        }
-      }
-
-      Section {
-        if self.store.isTimerOn {
-          Button("Stop timer") {
-            self.store.send(.toggleTimerButtonTapped)
-          }
-        } else {
-          Button("Start timer") {
-            self.store.send(.toggleTimerButtonTapped)
-          }
-        }
-      }
     }
-  }
 }
 
 #Preview {
@@ -92,3 +94,4 @@ struct ContentView: View {
     }
   )
 }
+
