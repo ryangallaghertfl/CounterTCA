@@ -12,6 +12,27 @@ struct NumberFactClient {
   var fetch: @Sendable (Int) async throws -> String
 }
 
+//numberfact client needs to conform to dependencykey, which registers the numberfact client with the dependency management system
+
+//MARK: conforming for dependency registration
+//livevalue is required for live situations
+extension NumberFactClient: DependencyKey {
+  static let liveValue = Self { number in
+    let (data, _) = try await URLSession.shared.data(
+      from: URL(string: "http://www.numbersapi.com/\(number)")!
+    )
+    return String(decoding: data, as: UTF8.self)
+  }
+}
+
+//MARK: gives us access to the keypath in the dependency property wrapper to finish registration with the property library
+extension DependencyValues {
+  var numberFact: NumberFactClient {
+    get { self[NumberFactClient.self] }
+    set { self[NumberFactClient.self] = newValue }
+  }
+}
+
 struct CounterFeature: Reducer {
     struct State: Equatable {
         var count = 0
@@ -34,6 +55,8 @@ struct CounterFeature: Reducer {
       }
     
     @Dependency(\.continuousClock) var clock
+    
+    @Dependency(\.numberFact) var numberFact
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
