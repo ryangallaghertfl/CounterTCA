@@ -24,19 +24,23 @@ final class CounterTCATests: XCTestCase {
     }
     
     func testTimer() async throws {
+        
+        let clock = TestClock()
 
         let store = TestStore(initialState: CounterFeature.State()) {
           CounterFeature()
-        }
+        } withDependencies: {
+            $0.continuousClock = clock
+          }
 
         await store.send(.toggleTimerButtonTapped) {
           $0.isTimerOn = true
         }
-        try await Task.sleep(for: .milliseconds(1_100))
+        await clock.advance(by: .seconds(1))
         await store.receive(.timerTicked) {
           $0.count = 1
         }
-        try await Task.sleep(for: .milliseconds(1_100))
+        await clock.advance(by: .seconds(1))
         await store.receive(.timerTicked) {
           $0.count = 2
         }
