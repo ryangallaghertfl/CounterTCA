@@ -8,6 +8,10 @@
 import SwiftUI
 import ComposableArchitecture
 
+struct NumberFactClient {
+  var fetch: @Sendable (Int) async throws -> String
+}
+
 struct CounterFeature: Reducer {
     struct State: Equatable {
         var count = 0
