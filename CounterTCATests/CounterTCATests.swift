@@ -4,18 +4,19 @@
 //
 //  Created by Ryan Gallagher on 01/12/2023.
 //
-
+import ComposableArchitecture
 import XCTest
 @testable import CounterTCA
 
+
+@MainActor
 final class CounterTCATests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    func testCounter() async {
+        let store = TestStore(initialState: CounterFeature.State()) {
+          CounterFeature()
+        }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+      }
 
 }
