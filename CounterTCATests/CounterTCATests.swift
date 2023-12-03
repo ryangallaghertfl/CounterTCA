@@ -16,6 +16,10 @@ final class CounterTCATests: XCTestCase {
         let store = TestStore(initialState: CounterFeature.State()) {
           CounterFeature()
         }
+        
+        await store.send(.incrementButtonTapped) {
+          $0.count = 1 //we are asserting here
+        }
 
       }
 
