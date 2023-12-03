@@ -73,14 +73,11 @@ struct CounterFeature: Reducer {
                 return .none
                 
             case .getFactButtonTapped:
-                state.fact = nil
-                state.isLoadingFact = true
-                return .run { [count = state.count] send in
-                    try await self.clock.sleep(for: .seconds(1))
-                    let (data, _) = try await URLSession.shared.data(from: URL(string: "http://www.numbersapi.com/\(count)")!)
-                    let fact = String(decoding: data, as: UTF8.self)
-                    await send(.factResponse(fact))
-                }
+              state.fact = nil
+              state.isLoadingFact = true
+              return .run { [count = state.count] send in
+                try await send(.factResponse(self.numberFact.fetch(count)))
+              }
                 
             case .incrementButtonTapped:
                 state.count += 1
