@@ -68,10 +68,8 @@ struct CounterFeature: Reducer {
                     state.isTimerOn.toggle()
                     if state.isTimerOn {
                       return .run { send in
-                          while true {
-                              
-                              try await self.clock.sleep(for: .seconds(1))
-                          await send(.timerTicked)
+                          for await _ in self.clock.timer(interval: .seconds(1)) {
+                                        await send(.timerTicked)
                         }
                       }
                       .cancellable(id: CancelID.timer)
