@@ -52,7 +52,7 @@ final class CounterTCATests: XCTestCase {
     func testGetFact() async {
        let store = TestStore(initialState: CounterFeature.State()) {
          CounterFeature()
-       }
+       } withDependencies: { $0.continuousClock = ImmediateClock() }
        await store.send(.getFactButtonTapped) {
          $0.isLoadingFact = true
        }
