@@ -49,4 +49,16 @@ final class CounterTCATests: XCTestCase {
         }
       }
     
+    func testGetFact() async {
+       let store = TestStore(initialState: CounterFeature.State()) {
+         CounterFeature()
+       }
+       await store.send(.getFactButtonTapped) {
+         $0.isLoadingFact = true
+       }
+       await store.receive(.factResponse("placeholder")) {
+         $0.isLoadingFact = false
+       }
+     }
+    
 }
