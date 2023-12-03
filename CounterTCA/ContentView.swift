@@ -29,6 +29,8 @@ struct CounterFeature: Reducer {
         case timer
       }
     
+    @Dependency(\.continuousClock) var clock
+    
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -47,7 +49,7 @@ struct CounterFeature: Reducer {
                 state.fact = nil
                 state.isLoadingFact = true
                 return .run { [count = state.count] send in
-                    try await Task.sleep(for: .seconds(1))
+                    try await self.clock.sleep(for: .seconds(1))
                     let (data, _) = try await URLSession.shared.data(from: URL(string: "http://www.numbersapi.com/\(count)")!)
                     let fact = String(decoding: data, as: UTF8.self)
                     await send(.factResponse(fact))
@@ -68,7 +70,7 @@ struct CounterFeature: Reducer {
                       return .run { send in
                           while true {
                               
-                              try await Task.sleep(for: .seconds(1))
+                              try await self.clock.sleep(for: .seconds(1))
                           await send(.timerTicked)
                         }
                       }
