@@ -64,4 +64,18 @@ final class CounterTCATests: XCTestCase {
        }
      }
     
+    func testGetFact_Failure() async {
+        let store = TestStore(initialState: CounterFeature.State()) {
+          CounterFeature()
+        } withDependencies: {
+          $0.numberFact.fetch = { _ in
+            struct SomeError: Error {}
+            throw SomeError()
+          }
+        }
+        await store.send(.getFactButtonTapped) {
+          $0.isLoadingFact = true
+        }
+      }
+    
 }
