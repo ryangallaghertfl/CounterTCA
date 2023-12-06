@@ -58,7 +58,8 @@ final class CounterTCATests: XCTestCase {
        await store.send(.getFactButtonTapped) {
          $0.isLoadingFact = true
        }
-       await store.receive(.factResponse("placeholder")) {
+       await store.receive(.factResponse("0 is a great number!")) {
+         $0.fact = "0 is a great number!"
          $0.isLoadingFact = false
        }
      }
