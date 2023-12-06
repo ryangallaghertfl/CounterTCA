@@ -73,6 +73,7 @@ final class CounterTCATests: XCTestCase {
             throw SomeError()
           }
         }
+        XCTExpectFailure()
         await store.send(.getFactButtonTapped) {
           $0.isLoadingFact = true
         }
